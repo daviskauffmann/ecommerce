@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { DeepPartial, Repository } from 'typeorm';
 import { EntityService } from '../entity/entity.service';
 import { User } from './user.entity';
 
@@ -13,7 +14,19 @@ export class UserService extends EntityService<User> {
     super(userRepository);
   }
 
-  async findOne(options?: FindOneOptions<User>): Promise<User> {
-    return { id: 1, username: 'username', password: 'password' };
+  async create(prototype: DeepPartial<User>) {
+    prototype.password = await this.hashPassword(prototype.password);
+    return super.create(prototype);
+  }
+
+  async update(entity: User, update: DeepPartial<User>) {
+    if (update.password) {
+      update.password = await this.hashPassword(update.password);
+    }
+    return super.update(entity, update);
+  }
+
+  private async hashPassword(password: string) {
+    return bcrypt.hash(password, 10);
   }
 }

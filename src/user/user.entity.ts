@@ -1,5 +1,7 @@
-import { Column, Entity as Table } from 'typeorm';
+import { Column, Entity as Table, OneToMany } from 'typeorm';
+import { Role } from '../auth/role.enum';
 import { Entity } from '../entity/entity.entity';
+import { Order } from '../order/order.entity';
 
 @Table()
 export class User extends Entity {
@@ -8,4 +10,13 @@ export class User extends Entity {
 
   @Column()
   password: string;
+
+  @Column()
+  email: string;
+
+  @Column('text', { array: true })
+  roles: Role[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

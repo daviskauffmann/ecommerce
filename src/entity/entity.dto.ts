@@ -77,13 +77,16 @@ export class ReadQuery {
   relations?: string;
 }
 
-export abstract class SearchResponse<T extends EntityDto, V extends Entity> {
-  abstract items: T[];
+export abstract class SearchResponse<
+  TEntityDto extends EntityDto,
+  TEntity extends Entity,
+> {
+  abstract items: TEntityDto[];
 
   @ApiProperty({ required: false })
   count?: number;
 
-  constructor(result: FindManyResult<V>) {
+  constructor(result: FindManyResult<TEntity>) {
     this.count = result.count;
   }
 }

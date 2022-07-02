@@ -16,6 +16,7 @@ export class EntityFactory {
     product.id = faker.datatype.number();
     product.name = faker.random.word();
     product.description = faker.random.words();
+    product.categories = [faker.random.word(), faker.random.word()];
     Object.assign(product, overrides);
     return product;
   }

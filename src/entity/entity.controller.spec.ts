@@ -3,11 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EntityFactory } from '../../test/entity.factory';
 import { ExampleController } from '../../test/example.controller';
-import {
-  ExampleDto,
-  ExampleSearchQuery,
-  ExampleSearchResponse,
-} from '../../test/example.dto';
+import { ExampleDto, ExampleSearchResponse } from '../../test/example.dto';
 import { ExampleService } from '../../test/example.service';
 
 describe('EntityController', () => {
@@ -44,11 +40,12 @@ describe('EntityController', () => {
 
   it('should search', async () => {
     const examples = [EntityFactory.example()];
-    const query: ExampleSearchQuery = {};
+    const query = {};
+    const result = { entities: examples };
 
     jest
       .spyOn(exampleService, 'findMany')
-      .mockImplementation(async () => ({ entities: examples }));
+      .mockImplementation(async () => result);
 
     const response = await controller.search(query);
 
@@ -64,10 +61,7 @@ describe('EntityController', () => {
       undefined,
     );
     expect(response).toBeInstanceOf(ExampleSearchResponse);
-    expect(response.items).toEqual(
-      examples.map((testEntity) => new ExampleDto(testEntity)),
-    );
-    expect(response.count).toBeUndefined();
+    expect(response).toEqual(new ExampleSearchResponse(result));
   });
 
   it('should create', async () => {
@@ -83,10 +77,11 @@ describe('EntityController', () => {
     const response = await controller.create(body);
 
     expect(exampleService.create).toHaveBeenCalledWith(body);
+    expect(response).toBeInstanceOf(ExampleDto);
     expect(response).toEqual(new ExampleDto(example));
   });
 
-  it('should get', async () => {
+  it('should read', async () => {
     const example = EntityFactory.example();
     const params = { id: example.id };
     const query = {};
@@ -106,7 +101,7 @@ describe('EntityController', () => {
     expect(response).toEqual(new ExampleDto(example));
   });
 
-  it('should fail to get', async () => {
+  it('should fail to read', async () => {
     const id = faker.datatype.number();
     const params = { id };
     const query = {};
@@ -145,6 +140,7 @@ describe('EntityController', () => {
 
     expect(exampleService.findOneById).toHaveBeenCalledWith(params.id);
     expect(exampleService.update).toHaveBeenCalledWith(example, body);
+    expect(response).toBeInstanceOf(ExampleDto);
     expect(response).toEqual(new ExampleDto(merged));
   });
 

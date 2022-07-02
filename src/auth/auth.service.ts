@@ -10,20 +10,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(
-    username: string,
-    password: string,
-  ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.userService.findOne({ where: { username } });
-    if (user && user.password === password) {
-      const { password: _, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
   async login(user: User) {
-    const payload = { sub: user.id, username: user.username };
+    const payload = {
+      sub: user.id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles,
+    };
     return {
       accessToken: this.jwtService.sign(payload),
     };

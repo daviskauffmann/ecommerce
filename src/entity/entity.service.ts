@@ -7,30 +7,30 @@ import {
 } from 'typeorm';
 import { Entity } from './entity.entity';
 
-export class FindManyResult<T extends Entity> {
-  constructor(public entities: T[], public count?: number) {}
+export class FindManyResult<TEntity extends Entity> {
+  constructor(public entities: TEntity[], public count?: number) {}
 }
 
-export abstract class EntityService<T extends Entity> {
-  constructor(private repository: Repository<T>) {}
+export abstract class EntityService<TEntity extends Entity> {
+  constructor(private repository: Repository<TEntity>) {}
 
-  async create(prototype: DeepPartial<T>) {
+  async create(prototype: DeepPartial<TEntity>) {
     const entity = this.repository.create(prototype);
     await this.repository.save(entity);
     return entity;
   }
 
-  async update(entity: T, update: DeepPartial<T>) {
+  async update(entity: TEntity, update: DeepPartial<TEntity>) {
     entity = this.repository.merge(entity, update);
     await this.repository.save(entity);
     return entity;
   }
 
-  async delete(entity: T) {
+  async delete(entity: TEntity) {
     await this.repository.remove(entity);
   }
 
-  async findMany(options?: FindManyOptions<T>, count?: boolean) {
+  async findMany(options?: FindManyOptions<TEntity>, count?: boolean) {
     if (count) {
       const [entities, count] = await this.repository.findAndCount(options);
       return new FindManyResult(entities, count);
@@ -40,11 +40,11 @@ export abstract class EntityService<T extends Entity> {
     }
   }
 
-  findOne(options?: FindOneOptions<T>): Promise<T | null> {
+  findOne(options?: FindOneOptions<TEntity>): Promise<TEntity | null> {
     return this.repository.findOne(options);
   }
 
   findOneById(id: number) {
-    return this.repository.findOneBy({ id } as FindOptionsWhere<T>);
+    return this.repository.findOneBy({ id } as FindOptionsWhere<TEntity>);
   }
 }

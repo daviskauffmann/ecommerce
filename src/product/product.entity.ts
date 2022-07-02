@@ -10,6 +10,9 @@ export class Product extends Entity {
   @Column()
   description: string;
 
-  @OneToMany(() => Order, (order) => order.productId)
+  @Column('text', { array: true })
+  categories: string[];
+
+  @OneToMany(() => Order, (order) => order.product)
   orders: Order[];
 }

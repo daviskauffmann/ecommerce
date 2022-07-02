@@ -52,11 +52,12 @@ describe('EntityService', () => {
       .spyOn(exampleRepository, 'save')
       .mockImplementation(async () => undefined);
 
-    const result = await service.create(prototype);
+    const entity = await service.create(prototype);
 
     expect(exampleRepository.create).toHaveBeenCalledWith(prototype);
     expect(exampleRepository.save).toHaveBeenCalledWith(example);
-    expect(result).toEqual(example);
+    expect(entity).toBeInstanceOf(Example);
+    expect(entity).toEqual(example);
   });
 
   it('should update', async () => {
@@ -73,11 +74,12 @@ describe('EntityService', () => {
       .spyOn(exampleRepository, 'save')
       .mockImplementation(async () => undefined);
 
-    const result = await service.update(example, update);
+    const entity = await service.update(example, update);
 
     expect(exampleRepository.merge).toHaveBeenCalledWith(example, update);
     expect(exampleRepository.save).toHaveBeenCalledWith(merged);
-    expect(result).toEqual(merged);
+    expect(entity).toBeInstanceOf(Example);
+    expect(entity).toEqual(merged);
     expect(merged).not.toEqual(example);
   });
 
@@ -136,6 +138,7 @@ describe('EntityService', () => {
     const entity = await service.findOne(options);
 
     expect(exampleRepository.findOne).toHaveBeenCalledWith(options);
+    expect(entity).toBeInstanceOf(Example);
     expect(entity).toBe(example);
   });
 
@@ -151,6 +154,7 @@ describe('EntityService', () => {
     expect(exampleRepository.findOneBy).toHaveBeenCalledWith({
       id: example.id,
     });
+    expect(entity).toBeInstanceOf(Example);
     expect(entity).toBe(example);
   });
 });
