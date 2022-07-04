@@ -3,6 +3,12 @@ import { Entity } from '../entity/entity.entity';
 import { Product } from '../product/product.entity';
 import { User } from '../user/user.entity';
 
+export enum OrderState {
+  Processing = 'processing',
+  Cancelled = 'cancelled',
+  Shipped = 'shipped',
+}
+
 @Table()
 export class Order extends Entity {
   @Column()
@@ -10,6 +16,9 @@ export class Order extends Entity {
 
   @Column()
   productId: number;
+
+  @Column('enum', { enum: OrderState })
+  state: OrderState;
 
   @JoinColumn()
   @ManyToOne(() => User, (user) => user.orders)

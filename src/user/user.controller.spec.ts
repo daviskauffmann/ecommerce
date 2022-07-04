@@ -25,19 +25,4 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-
-  it('should search and convert categories string into FindOperator', async () => {
-    const categories = `${faker.random.word()},${faker.random.word()}`;
-    const query = { categories };
-
-    jest
-      .spyOn(EntityController.prototype, 'search')
-      .mockImplementation(async () => undefined);
-
-    await controller.search(query);
-
-    expect(EntityController.prototype.search).toHaveBeenCalledWith({
-      categories: ArrayOverlap(categories.split(',')),
-    });
-  });
 });

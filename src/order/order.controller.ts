@@ -23,11 +23,12 @@ import { User } from '../user/user.entity';
 import {
   OrderCreateBody,
   OrderDto,
+  OrderPlaceBody,
   OrderSearchQuery,
   OrderSearchResponse,
   OrderUpdateBody,
 } from './order.dto';
-import { Order } from './order.entity';
+import { Order, OrderState } from './order.entity';
 import { OrderService } from './order.service';
 
 @Controller('api/orders')
@@ -100,5 +101,40 @@ export class OrderController extends EntityController<
   @ApiNotFoundResponse({ type: HttpError })
   public delete(@Param() params: ReadParams) {
     return super.delete(params);
+  }
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.User)
+  @Post('/place')
+  @ApiOkResponse({ type: OrderDto })
+  public async place(
+    @Body() body: OrderPlaceBody,
+    @Request() req?: express.Request,
+  ) {
+    return super.create({
+      userId: (req?.user as User).id,
+      productId: body.productId,
+      state: OrderState.Processing,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
+  @Post('/:id/cancel')
+  @ApiOkResponse({ type: OrderDto })
+  public async cancel(@Param() params: ReadParams) {
+    return super.update(params, {
+      state: OrderState.Cancelled,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
+  @Post('/:id/ship')
+  @ApiOkResponse({ type: OrderDto })
+  public async ship(@Param() params: ReadParams) {
+    return super.update(params, {
+      state: OrderState.Shipped,
+    });
   }
 }
