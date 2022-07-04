@@ -1,7 +1,4 @@
-import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ArrayOverlap } from 'typeorm';
-import { EntityController } from '../entity/entity.controller';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
