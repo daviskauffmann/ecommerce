@@ -46,7 +46,7 @@ export abstract class EntityController<
         order: this.order(order),
         skip,
         take,
-        where: where as FindOptionsWhere<TEntity>,
+        where: where as unknown as FindOptionsWhere<TEntity>,
       },
       count,
     );
