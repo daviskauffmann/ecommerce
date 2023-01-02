@@ -13,13 +13,12 @@ import {
 } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import * as express from 'express';
-import { JwtAuthGuard } from '../auth/jwt.guard';
-import { Roles } from '../auth/role.dectorator';
-import { Role } from '../auth/role.enum';
-import { RoleGuard } from '../auth/role.guard';
+import { AccessTokenGuard } from '../auth/access-token/access-token.guard';
+import { Roles } from '../auth/role/role.decorator';
+import { Role } from '../auth/role/role.enum';
+import { RoleGuard } from '../auth/role/role.guard';
 import { EntityController } from '../entity/entity.controller';
 import { HttpError, ReadParams, ReadQuery } from '../entity/entity.dto';
-import { User } from '../user/user.entity';
 import {
   OrderCreateBody,
   OrderDto,
@@ -43,7 +42,7 @@ export class OrderController extends EntityController<
     super(orderService, OrderDto, OrderSearchResponse);
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.User)
   @Get()
   @ApiOkResponse({ type: OrderSearchResponse })
@@ -51,13 +50,13 @@ export class OrderController extends EntityController<
     @Query() query: OrderSearchQuery,
     @Request() req?: express.Request,
   ) {
-    if (!(req?.user as User).roles.includes(Role.Admin)) {
-      query.userId = (req.user as User).id;
+    if (!req.user.roles.includes(Role.Admin)) {
+      query.userId = req.user.id;
     }
     return super.search(query);
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.Admin)
   @Post()
   @ApiOkResponse({ type: OrderDto })
@@ -65,7 +64,7 @@ export class OrderController extends EntityController<
     return super.create(body);
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.User)
   @Get(':id')
   @ApiOkResponse({ type: OrderDto })
@@ -77,15 +76,15 @@ export class OrderController extends EntityController<
   ) {
     const orderDto = await super.read(params, query);
     if (
-      !(req?.user as User).roles.includes(Role.Admin) &&
-      orderDto.userId !== (req?.user as User).id
+      !req.user.roles.includes(Role.Admin) &&
+      orderDto.userId !== req.user.id
     ) {
       throw new UnauthorizedException();
     }
     return orderDto;
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.Admin)
   @Put(':id')
   @ApiOkResponse({ type: OrderDto })
@@ -94,7 +93,7 @@ export class OrderController extends EntityController<
     return super.update(params, body);
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.Admin)
   @Delete(':id')
   @ApiOkResponse()
@@ -103,7 +102,7 @@ export class OrderController extends EntityController<
     return super.delete(params);
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.User)
   @Post('/place')
   @ApiOkResponse({ type: OrderDto })
@@ -112,13 +111,13 @@ export class OrderController extends EntityController<
     @Request() req?: express.Request,
   ) {
     return super.create({
-      userId: (req?.user as User).id,
+      userId: req.user.id,
       productId: body.productId,
       state: OrderState.Processing,
     });
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.Admin)
   @Post('/:id/cancel')
   @ApiOkResponse({ type: OrderDto })
@@ -128,7 +127,7 @@ export class OrderController extends EntityController<
     });
   }
 
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Roles(Role.Admin)
   @Post('/:id/ship')
   @ApiOkResponse({ type: OrderDto })

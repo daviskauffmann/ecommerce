@@ -8,7 +8,7 @@ import {
 import { Example } from './example.entity';
 import { ExampleService } from './example.service';
 
-@Controller('')
+@Controller('api/example')
 export class ExampleController extends EntityController<
   Example,
   ExampleDto,

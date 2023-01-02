@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
-import { Role } from '../auth/role.enum';
+import { Role } from '../auth/role/role.enum';
 import { EntityDto, SearchQuery, SearchResponse } from '../entity/entity.dto';
 import { FindManyResult } from '../entity/entity.service';
 import { Order } from '../order/order.entity';

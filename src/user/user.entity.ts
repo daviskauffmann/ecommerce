@@ -1,5 +1,5 @@
 import { Column, Entity as Table, OneToMany } from 'typeorm';
-import { Role } from '../auth/role.enum';
+import { Role } from '../auth/role/role.enum';
 import { Entity } from '../entity/entity.entity';
 import { Order } from '../order/order.entity';
 

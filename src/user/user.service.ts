@@ -16,6 +16,7 @@ export class UserService extends EntityService<User> {
 
   async create(prototype: DeepPartial<User>) {
     prototype.password = await this.hashPassword(prototype.password);
+
     return super.create(prototype);
   }
 
@@ -23,6 +24,7 @@ export class UserService extends EntityService<User> {
     if (update.password) {
       update.password = await this.hashPassword(update.password);
     }
+
     return super.update(entity, update);
   }
 

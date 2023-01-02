@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { FindOperator } from 'typeorm';
 import { EntityDto, SearchQuery, SearchResponse } from '../entity/entity.dto';
 import { FindManyResult } from '../entity/entity.service';
@@ -15,6 +15,9 @@ export class ProductDto extends EntityDto {
 
   @ApiProperty()
   categories: string[];
+
+  @ApiProperty()
+  price: number;
 
   @ApiProperty({ required: false })
   orders?: Order[];
@@ -44,6 +47,11 @@ export class ProductSearchQuery extends SearchQuery {
   @IsNotEmpty()
   @IsOptional()
   categories?: string | FindOperator<string>;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  price?: number;
 }
 
 export class ProductSearchResponse extends SearchResponse<ProductDto, Product> {
@@ -68,6 +76,10 @@ export class ProductCreateBody {
   @ApiProperty()
   @IsString({ each: true })
   categories: string[];
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
 }
 
 export class ProductUpdateBody {
@@ -85,4 +97,9 @@ export class ProductUpdateBody {
   @IsString({ each: true })
   @IsOptional()
   categories?: string[];
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  price?: number;
 }

@@ -4,11 +4,11 @@ import { Example } from './example.entity';
 
 export class EntityFactory {
   static example(overrides?: Partial<Example>) {
-    const testEntity = new Example();
-    testEntity.id = faker.datatype.number();
-    testEntity.string = faker.random.word();
-    Object.assign(testEntity, overrides);
-    return testEntity;
+    const example = new Example();
+    example.id = faker.datatype.number();
+    example.string = faker.random.word();
+    Object.assign(example, overrides);
+    return example;
   }
 
   static product(overrides?: Partial<Product>) {

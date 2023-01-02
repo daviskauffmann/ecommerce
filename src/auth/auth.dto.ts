@@ -18,4 +18,13 @@ export class RegisterBody {
 export class LoginResponse {
   @ApiProperty()
   accessToken: string;
+
+  @ApiProperty()
+  accessTokenExpiresIn: string;
+
+  @ApiProperty()
+  refreshToken: string;
+
+  @ApiProperty()
+  refreshTokenExpiresIn: string;
 }
