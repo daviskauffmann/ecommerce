@@ -12,9 +12,6 @@ export class UserDto extends EntityDto {
   username: string;
 
   @ApiProperty()
-  password: string;
-
-  @ApiProperty()
   email: string;
 
   @ApiProperty({ enum: Role, isArray: true })
@@ -26,7 +23,6 @@ export class UserDto extends EntityDto {
   constructor(user: User) {
     super(user);
     this.username = user.username;
-    this.password = user.password;
     this.email = user.email;
     this.roles = user.roles;
     this.orders = user.orders;

@@ -27,6 +27,7 @@ export class ProductDto extends EntityDto {
     this.name = product.name;
     this.description = product.description;
     this.categories = product.categories;
+    this.price = product.price;
     this.orders = product.orders;
   }
 }

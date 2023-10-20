@@ -63,7 +63,7 @@ describe('EntityService', () => {
   it('should update', async () => {
     const example = EntityFactory.example();
     const update = {
-      string: faker.random.word(),
+      string: faker.word.sample(),
     };
     const merged = EntityFactory.example({
       string: update.string,

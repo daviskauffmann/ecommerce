@@ -30,7 +30,7 @@ export class AuthService {
       username,
       password,
       email,
-      roles: [Role.User, ...(username === 'admin' ? [Role.Admin] : [])],
+      roles: [Role.User],
     });
 
     return this.generateTokens(user);

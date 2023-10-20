@@ -102,7 +102,7 @@ describe('EntityController', () => {
   });
 
   it('should fail to read', async () => {
-    const id = faker.datatype.number();
+    const id = faker.number.int();
     const params = { id };
     const query = {};
 
@@ -125,7 +125,7 @@ describe('EntityController', () => {
       id: example.id,
     };
     const body = {
-      string: faker.random.word(),
+      string: faker.word.sample(),
     };
     const merged = EntityFactory.example({
       string: body.string,
@@ -145,7 +145,7 @@ describe('EntityController', () => {
   });
 
   it('should fail to update', async () => {
-    const params = { id: faker.datatype.number() };
+    const params = { id: faker.number.int() };
     const body = {};
 
     jest
@@ -180,7 +180,7 @@ describe('EntityController', () => {
   });
 
   it('should fail to delete', async () => {
-    const params = { id: faker.datatype.number() };
+    const params = { id: faker.number.int() };
 
     jest
       .spyOn(exampleService, 'findOneById')

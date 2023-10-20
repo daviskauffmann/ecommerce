@@ -13,7 +13,7 @@ export class Product extends Entity {
   @Column('text', { array: true })
   categories: string[];
 
-  @Column()
+  @Column('float')
   price: number;
 
   @OneToMany(() => Order, (order) => order.product)

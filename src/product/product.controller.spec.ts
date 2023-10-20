@@ -27,7 +27,7 @@ describe('ProductController', () => {
   });
 
   it('should search and convert categories string into FindOperator', async () => {
-    const categories = `${faker.random.word()},${faker.random.word()}`;
+    const categories = `${faker.word.sample()},${faker.word.sample()}`;
     const query = { categories };
 
     jest
